@@ -1,25 +1,12 @@
-import React, { useEffect } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useEffect } from "react";
 
 const Logout = () => {
-    const navigate = useNavigate(null);
-
-    const clearToken = () => {
-        const getToken = window.localStorage.getItem("token");
-        if (getToken && getToken.length > 0) {
-            window.localStorage.clear();
-            window.location.reload();
-        }
-    };
     useEffect(() => {
-        clearToken();
+        window.localStorage.removeItem("token");
+        window.location.reload();
     }, []);
 
-    return (
-        <div style={{ padding: "15px" }}>
-            Logout Successful
-        </div>
-    )
-}
+    return <div style={{ maxWidth: "600px", margin: "0 auto", color: "#c6d8e8" }}>Logout successful.</div>;
+};
 
-export default Logout
+export default Logout;

@@ -1,82 +1,37 @@
-import React, { useEffect, useRef, useState } from "react";
-import styles from "./styles.module.scss";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { FiLogIn } from "react-icons/fi";
+import { NavLink, useNavigate } from "react-router-dom";
+import styles from "./styles.module.scss";
 
 const Login = () => {
-    const navigate = useNavigate(null);
+    const navigate = useNavigate();
     const submitButton = useRef(null);
-
-    const [inputs, setInputs] = useState({
-        username: "",
-        password: ""
-    });
+    const [inputs, setInputs] = useState({ username: "", password: "" });
     const [response, setResponse] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        // console.log(inputs);
-
-        if (inputs.username.trim().length < 3 || inputs.username.trim().length > 15) {
-            setResponse("Username length must >=3 and <=15");
-            return;
-        }
-        if (inputs.password.trim().length < 6) {
-            setResponse("Password length must >=6");
-            return;
-        }
-
-        submitButton.current.style.cssText = `
-            display: none;
-        `;
-        const postData = {
-            username: inputs.username,
-            password: inputs.password
-        };
-        axios.post("http://localhost:1198/api/login", postData).then(response => {
-            // console.log(response);
-            if (response.data.success === true) {
+        if (inputs.username.trim().length < 3 || inputs.username.trim().length > 15) return setResponse("Username length must be between 3 and 15.");
+        if (inputs.password.trim().length < 6) return setResponse("Password length must be at least 6.");
+        setLoading(true);
+        setResponse("");
+        axios.post("http://localhost:1198/api/login", inputs).then((result) => {
+            if (result.data.success === true) {
                 window.localStorage.clear();
-                window.localStorage.setItem("token", response.data.token);
+                window.localStorage.setItem("token", result.data.token);
                 navigate("/dashboard");
                 window.location.reload();
-            } else {
-                alert(response.data.message);
-            }
-        }).catch(err => {
-            console.log(err);
-            setResponse(err.message);
-        }).finally(() => {
-            submitButton.current.style.cssText = `
-                display: block;
-            `;
-        });
-    };
-
-    const handleChange = (event) => {
-        setInputs(prev => ({ ...prev, [event.target.name]: event.target.value }));
+            } else setResponse(result.data.message);
+        }).catch((error) => setResponse(error.response?.data?.message || error.message)).finally(() => setLoading(false));
     };
 
     useEffect(() => {
-        const token = window.localStorage.getItem("token") || "";
-        if (token.length > 0) {
-            return navigate("/dashboard");
-        }
-    }, []);
+        if (window.localStorage.getItem("token")) navigate("/dashboard");
+    }, [navigate]);
 
-    return (
-        <div className={styles.container}>
-            <form onSubmit={handleSubmit}>
-                <input type="text" name="username" placeholder="Username" onChange={handleChange} value={inputs.username} required />
+    return <section className={styles.container}><form className={styles.formCard} onSubmit={handleSubmit}><h1 className={styles.title}>Welcome back</h1><p className={styles.subtitle}>Sign in to manage your shared files.</p><div className={styles.field}><label htmlFor="username">Username</label><input className={styles.input} id="username" type="text" name="username" placeholder="Enter username" onChange={(event) => setInputs((prev) => ({ ...prev, username: event.target.value }))} value={inputs.username} required /></div><div className={styles.field}><label htmlFor="password">Password</label><input className={styles.input} id="password" type="password" name="password" placeholder="Enter password" onChange={(event) => setInputs((prev) => ({ ...prev, password: event.target.value }))} value={inputs.password} required /></div><div className={styles.response} role="alert">{response}</div><button ref={submitButton} className={styles.submitButton} type="submit" disabled={loading}><FiLogIn /> {loading ? "Signing in..." : "Sign in"}</button><p className={styles.note}>New here? <NavLink to="/register">Create an account</NavLink></p></form></section>;
+};
 
-                <input type="password" name="password" placeholder="Password" onChange={handleChange} value={inputs.password} required />
-
-                <div className={styles.response}>{response}</div>
-
-                <input ref={submitButton} type="submit" />
-            </form>
-        </div>
-    )
-}
-
-export default Login
+export default Login;

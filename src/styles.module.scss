@@ -1,40 +1,26 @@
-*,
-::before,
-::after {
-    padding: 0;
-    margin: 0;
-    font-size: 12px;
-    font-family: Verdana, Geneva, Tahoma, sans-serif;
-}
-
-.container {
-    // border: 1px solid #f00;
-
-    .headerContainer {
-        display: flex;
-        justify-content: space-between;
-        align-items: stretch;
-        background-color: #333;
-        height: 50px;
-
-        .appName {
-            padding-left: 15px;
-            padding-right: 15px;
-            color: #fff;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-        }
-
-        .navLinksContainer {
-            display: flex;
-            align-items: center;
-
-            .navLink {
-                padding: 15px;
-                color: #fff;
-                text-decoration: none;
-            }
-        }
-    }
-}
+.container { min-height: 100vh; color: #dfe9f5; background: radial-gradient(circle at 10% 0%, #163b51 0, #081421 36%, #050b13 100%); }
+.headerContainer { position: fixed; inset: 0 0 auto; z-index: 20; display: flex; align-items: center; justify-content: space-between; min-height: 74px; padding: 0 5vw; border-bottom: 1px solid rgba(149, 191, 224, 0.18); background: rgba(5, 15, 25, 0.92); backdrop-filter: blur(14px); }
+.appName { display: inline-flex; align-items: center; gap: 0.7rem; color: #fff; text-decoration: none; }
+.appName img { width: 42px; height: 42px; padding: 0.35rem; border: 1px solid rgba(119, 190, 238, 0.5); border-radius: 11px; object-fit: contain; background: #10283a; }
+.appName span { display: grid; gap: 0.1rem; }
+.appName strong { font-size: 1rem; }
+.appName small { color: #85a0b7; font-size: 0.72rem; }
+.navLinksContainer { display: flex; align-items: center; gap: 0.25rem; }
+.navLink { padding: 0.6rem 0.75rem; border: 1px solid transparent; border-radius: 9px; color: #aac0d4; font-size: 0.76rem; font-weight: 700; letter-spacing: 0.08em; text-decoration: none; transition: color 180ms ease, border-color 180ms ease, box-shadow 180ms ease; }
+.navLink:hover, .active { color: #fff; border-color: #69c8ff; box-shadow: 0 0 17px rgba(105, 200, 255, 0.16); }
+.menuButton { display: none; width: 40px; height: 38px; place-items: center; border: 1px solid rgba(149, 191, 224, 0.3); border-radius: 9px; color: #fff; background: #10283a; cursor: pointer; }
+.contentContainer { min-height: calc(100vh - 74px); padding: 105px 5vw 3rem; }
+.footer { display: grid; grid-template-columns: minmax(220px, 1fr) auto; gap: 2rem; padding: 2.5rem 5vw 1.2rem; border-top: 1px solid rgba(149, 191, 224, 0.18); background: rgba(5, 15, 25, 0.7); }
+.footerTitle { display: inline-flex; align-items: center; gap: 0.5rem; color: #fff; font-weight: 700; }
+.footerTitle svg { color: #69c8ff; }
+.footerIntro p { max-width: 300px; margin: 0.6rem 0 0; color: #85a0b7; line-height: 1.6; }
+.footerGroups { display: flex; gap: 2rem; }
+.footerLabel { display: block; margin-bottom: 0.65rem; color: #85a0b7; font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; }
+.iconLinks { display: flex; flex-wrap: wrap; gap: 0.45rem; max-width: 250px; }
+.iconLinks a { display: grid; width: 34px; height: 34px; place-items: center; border: 1px solid rgba(149, 191, 224, 0.28); border-radius: 8px; color: #bdd4e7; transition: color 180ms ease, border-color 180ms ease, box-shadow 180ms ease; }
+.iconLinks a:hover { color: #fff; border-color: #69c8ff; box-shadow: 0 0 16px rgba(105, 200, 255, 0.18); }
+.footerBottom { grid-column: 1 / -1; padding-top: 1rem; border-top: 1px solid rgba(149, 191, 224, 0.14); color: #85a0b7; font-size: 0.8rem; }
+.footerBottom a { color: #fff; font-weight: 700; }
+.topButton { position: fixed; right: 1.25rem; bottom: 1.25rem; z-index: 19; display: grid; width: 42px; height: 42px; place-items: center; border: 1px solid #69c8ff; border-radius: 50%; color: #fff; background: #12314a; cursor: pointer; box-shadow: 0 8px 22px rgba(0, 0, 0, 0.3); }
+.topButton:hover { box-shadow: 0 0 18px rgba(105, 200, 255, 0.25); }
+@media (max-width: 680px) { .headerContainer { padding: 0 1rem; } .appName small { display: none; } .menuButton { display: grid; } .navLinksContainer { position: absolute; top: calc(100% + 0.5rem); right: 1rem; left: 1rem; display: none; flex-direction: column; align-items: stretch; padding: 0.5rem; border: 1px solid rgba(149, 191, 224, 0.22); border-radius: 13px; background: #0d2234; box-shadow: 0 18px 34px rgba(0, 0, 0, 0.32); } .open { display: flex; } .navLink { width: 100%; } .contentContainer { padding: 98px 1rem 2rem; } .footer { grid-template-columns: 1fr; padding: 2rem 1rem 1.2rem; } .footerGroups { flex-wrap: wrap; gap: 1.25rem; } }

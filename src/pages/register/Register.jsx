@@ -1,84 +1,28 @@
-import React, { useEffect, useRef, useState } from "react";
-import styles from "./styles.module.scss";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { FiUserPlus } from "react-icons/fi";
+import { NavLink, useNavigate } from "react-router-dom";
+import styles from "./styles.module.scss";
 
-const Regsiter = () => {
-    const navigate = useNavigate(null);
-    const submitButton = useRef(null);
-
-    const [inputs, setInputs] = useState({
-        username: "",
-        password: "",
-        confirmPassword: ""
-    });
+const Register = () => {
+    const navigate = useNavigate();
+    const [inputs, setInputs] = useState({ username: "", password: "", confirmPassword: "" });
     const [response, setResponse] = useState("");
+    const [loading, setLoading] = useState(false);
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        // console.log(inputs);
-
-        if (inputs.username.trim().length < 3 || inputs.username.trim().length > 15) {
-            setResponse("Username length must >=3 and <=15");
-            return;
-        }
-        if (inputs.password.trim().length < 6) {
-            setResponse("Password length must >=6");
-            return;
-        }
-        if (inputs.password !== inputs.confirmPassword) {
-            setResponse("Passwords do not match");
-            return;
-        }
-
-        submitButton.current.style.cssText = `
-            display: none;
-        `;
-        const postData = {
-            username: inputs.username,
-            password: inputs.password,
-            confirmPassword: inputs.confirmPassword
-        };
-        axios.post("http://localhost:1198/api/register", postData).then(response => {
-            // console.log(response);
-            setResponse(response.data.message);
-            navigate("/login");
-        }).catch(err => {
-            // console.log(err);
-            setResponse(err.message);
-        }).finally(() => {
-            submitButton.current.style.cssText = `
-                display: block;
-            `;
-        });
+        if (inputs.username.trim().length < 3 || inputs.username.trim().length > 15) return setResponse("Username length must be between 3 and 15.");
+        if (inputs.password.trim().length < 6) return setResponse("Password length must be at least 6.");
+        if (inputs.password !== inputs.confirmPassword) return setResponse("Passwords do not match.");
+        setLoading(true);
+        setResponse("");
+        axios.post("http://localhost:1198/api/register", inputs).then((result) => { setResponse(result.data.message); navigate("/login"); }).catch((error) => setResponse(error.response?.data?.message || error.message)).finally(() => setLoading(false));
     };
 
-    const handleChange = (event) => {
-        setInputs(prev => ({ ...prev, [event.target.name]: event.target.value }));
-    };
+    useEffect(() => { if (window.localStorage.getItem("token")) navigate("/dashboard"); }, [navigate]);
 
-    useEffect(() => {
-        const token = window.localStorage.getItem("token") || "";
-        if (token.length > 0) {
-            return navigate("/dashboard");
-        }
-    }, []);
+    return <section className={styles.container}><form className={styles.formCard} onSubmit={handleSubmit}><h1 className={styles.title}>Create an account</h1><p className={styles.subtitle}>Start sharing files from one simple workspace.</p><div className={styles.field}><label htmlFor="username">Username</label><input className={styles.input} id="username" type="text" name="username" placeholder="Choose username" onChange={(event) => setInputs((prev) => ({ ...prev, username: event.target.value }))} value={inputs.username} required /></div><div className={styles.field}><label htmlFor="password">Password</label><input className={styles.input} id="password" type="password" name="password" placeholder="Create password" onChange={(event) => setInputs((prev) => ({ ...prev, password: event.target.value }))} value={inputs.password} required /></div><div className={styles.field}><label htmlFor="confirmPassword">Confirm password</label><input className={styles.input} id="confirmPassword" type="password" name="confirmPassword" placeholder="Repeat password" onChange={(event) => setInputs((prev) => ({ ...prev, confirmPassword: event.target.value }))} value={inputs.confirmPassword} required /></div><div className={styles.response} role="alert">{response}</div><button className={styles.submitButton} type="submit" disabled={loading}><FiUserPlus /> {loading ? "Creating..." : "Create account"}</button><p className={styles.note}>Already registered? <NavLink to="/login">Sign in</NavLink></p></form></section>;
+};
 
-    return (
-        <div className={styles.container}>
-            <form onSubmit={handleSubmit}>
-                <input type="text" name="username" placeholder="Username" onChange={handleChange} value={inputs.username} required />
-
-                <input type="password" name="password" placeholder="Password" onChange={handleChange} value={inputs.password} required />
-
-                <input type="password" name="confirmPassword" placeholder="Confirm Password" onChange={handleChange} value={inputs.confirmPassword} required />
-
-                <div className={styles.response}>{response}</div>
-
-                <input ref={submitButton} type="submit" />
-            </form>
-        </div>
-    )
-}
-
-export default Regsiter
+export default Register;

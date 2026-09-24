@@ -1,29 +1,14 @@
-.container {
-    // border: 1px solid #f00;
-
-    form {
-        padding: 15px;
-
-        input[type="text"],
-        input[type="password"] {
-            height: 30px;
-            width: 280px;
-            padding-left: 10px;
-            display: block;
-            margin-top: 15px;
-        }
-
-        .response {
-            margin-top: 15px;
-            color: blue;
-            height: 15px;
-        }
-
-        input[type="submit"] {
-            height: 30px;
-            width: 100px;
-            display: inline-block;
-            margin-top: 15px;
-        }
-    }
-}
+.container, .container form { max-width: 480px; margin: 0 auto; }
+.container { padding-top: 3rem; }
+.formCard { padding: clamp(1.5rem, 5vw, 2.5rem); border: 1px solid rgba(149, 191, 224, 0.22); border-radius: 20px; background: rgba(14, 35, 52, 0.82); box-shadow: 0 20px 55px rgba(0, 0, 0, 0.24); }
+.title { margin: 0 0 0.45rem; color: #fff; font-size: 2rem; }
+.subtitle { margin: 0 0 1.5rem; color: #85a0b7; }
+.field { display: grid; gap: 0.45rem; margin-top: 1rem; }
+.field label { color: #c6d8e8; font-size: 0.85rem; font-weight: 600; }
+.input { width: 100%; min-height: 46px; padding: 0.75rem 0.9rem; border: 1px solid rgba(149, 191, 224, 0.25); border-radius: 10px; outline: none; color: #fff; background: #0a1d2e; transition: border-color 180ms ease, box-shadow 180ms ease; }
+.input:focus { border-color: #69c8ff; box-shadow: 0 0 0 3px rgba(105, 200, 255, 0.13); }
+.response { min-height: 1.25rem; margin-top: 1rem; color: #ffafaf; }
+.submitButton { width: 100%; min-height: 46px; margin-top: 1rem; border: 1px solid #69c8ff; border-radius: 10px; color: #061420; background: #69c8ff; font-weight: 700; cursor: pointer; transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease; }
+.submitButton:hover { border-color: #fff; background: #9ddfff; box-shadow: 0 0 20px rgba(105, 200, 255, 0.2); }
+.note { margin-top: 1.25rem; color: #85a0b7; font-size: 0.85rem; text-align: center; }
+.note a { color: #9edbff; }
